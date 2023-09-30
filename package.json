@@ -8,6 +8,7 @@
     "migrate:dev": "npx prisma migrate dev --name init"
   },
   "devDependencies": {
+    "@types/jsonwebtoken": "^9.0.3",
     "bun-types": "latest"
   },
   "peerDependencies": {
@@ -15,6 +16,8 @@
   },
   "dependencies": {
     "@prisma/client": "^5.3.1",
+    "lodash": "^4.17.21",
+    "njwt": "^2.0.0",
     "prisma": "^5.3.1"
   }
 }
