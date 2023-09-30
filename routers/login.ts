@@ -1,6 +1,7 @@
 // @ts-ignore
 import {PrismaClient} from '@prisma/client'
 import {verifyHash} from "../utils/auth";
+import {createToken} from "../utils/token";
 
 const prisma = new PrismaClient();
 
@@ -34,10 +35,15 @@ const attemptLogin = async (req: Request) => {
     }
 
     const isValid = await verifyHash(body.password, user.password)
+    if (!isValid) {
+        const errorMsg = {error: `Invalid login, please try again`};
+        return Response.json(errorMsg, 401);
+    }
 
     // Generate JWT
+    const token = await createToken(user.username, req);
 
-    const response = {valid: isValid};
+    const response = {token: token};
     return Response.json(response);
 }
 

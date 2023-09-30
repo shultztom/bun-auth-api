@@ -1,38 +1,26 @@
-// import {db} from '../db';
+import {verifyToken} from "../utils/token";
 
 const tokenRouter = (req: Request) => {
-    if (req.method === "GET") return getAll()
-    if (req.method === "POST") return createItem(req)
-    if (req.method === "PUT") return updateItem(req)
-    if (req.method === "DELETE") return deleteItem(req)
+    if (req.method === "GET") return verify(req)
 
     return new Response(`404!`);
 }
+const verify = async (req: Request) => {
+    const token = req.headers.get('x-auth-token');
+    if (!token) {
+        const errorMsg = {error: `Missing Token`};
+        return Response.json(errorMsg, 401);
+    }
 
-const getAll = () => {
-    const response = {data: "yo"};
+    const isValid = await verifyToken(token);
+    if (!isValid) {
+        const errorMsg = {error: `Invalid Token`};
+        return Response.json(errorMsg, 401);
+    }
 
+    const response = {message: "success"};
     return Response.json(response);
 }
-
-const createItem = async (req: Request) => {
-    const response = {data: "yo"};
-
-    return Response.json(response);
-}
-
-const updateItem = async (req: Request) => {
-    const response = {data: "yo"};
-
-    return Response.json(response);
-}
-
-const deleteItem = (req: Request) => {
-    const response = {data: "yo"};
-
-    return Response.json(response);
-}
-
 
 export {
     tokenRouter
